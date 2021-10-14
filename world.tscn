@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://tiles.tres" type="TileSet" id=1]
 [ext_resource path="res://assets/img/viking2.png" type="Texture" id=2]
@@ -89,6 +89,69 @@ tracks/0/keys = {
 "values": [ 18, 19 ]
 }
 
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "Run"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "attack"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "fall"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "jump"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "Idle"
+
+[sub_resource type="AnimationNodeTransition" id=12]
+input_count = 2
+input_0/name = "ground"
+input_0/auto_advance = false
+input_1/name = "air"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeTransition" id=13]
+input_count = 3
+input_0/name = "idle"
+input_0/auto_advance = false
+input_1/name = "run"
+input_1/auto_advance = false
+input_2/name = "attack"
+input_2/auto_advance = false
+
+[sub_resource type="AnimationNodeTransition" id=14]
+input_count = 2
+input_0/name = "falling"
+input_0/auto_advance = false
+input_1/name = "jumping"
+input_1/auto_advance = false
+
+[sub_resource type="AnimationNodeTimeScale" id=15]
+
+[sub_resource type="AnimationNodeBlendTree" id=16]
+graph_offset = Vector2( 274.681, -53.4457 )
+nodes/Animation/node = SubResource( 11 )
+nodes/Animation/position = Vector2( 580, -20 )
+"nodes/Animation 2/node" = SubResource( 7 )
+"nodes/Animation 2/position" = Vector2( 360, 100 )
+"nodes/Animation 3/node" = SubResource( 8 )
+"nodes/Animation 3/position" = Vector2( 580, 240 )
+"nodes/Animation 4/node" = SubResource( 9 )
+"nodes/Animation 4/position" = Vector2( 780, 320 )
+"nodes/Animation 5/node" = SubResource( 10 )
+"nodes/Animation 5/position" = Vector2( 780, 440 )
+nodes/In_air_state/node = SubResource( 12 )
+nodes/In_air_state/position = Vector2( 1000, 80 )
+nodes/Mouvement/node = SubResource( 13 )
+nodes/Mouvement/position = Vector2( 760, 80 )
+nodes/in_air/node = SubResource( 14 )
+nodes/in_air/position = Vector2( 1000, 280 )
+nodes/mouvement_time/node = SubResource( 15 )
+nodes/mouvement_time/position = Vector2( 540, 100 )
+nodes/output/position = Vector2( 1200, 80 )
+node_connections = [ "output", 0, "In_air_state", "mouvement_time", 0, "Animation 2", "In_air_state", 0, "Mouvement", "In_air_state", 1, "in_air", "in_air", 0, "Animation 4", "in_air", 1, "Animation 5", "Mouvement", 0, "Animation", "Mouvement", 1, "mouvement_time", "Mouvement", 2, "Animation 3" ]
+
 [node name="world" type="Node2D"]
 __meta__ = {
 "_edit_horizontal_guides_": [ -40.1583 ]
@@ -128,3 +191,11 @@ anims/Run = SubResource( 3 )
 anims/attack = SubResource( 4 )
 anims/fall = SubResource( 5 )
 anims/jump = SubResource( 6 )
+
+[node name="AnimationTree" type="AnimationTree" parent="player"]
+tree_root = SubResource( 16 )
+anim_player = NodePath("../AnimationPlayer")
+parameters/In_air_state/current = 0
+parameters/Mouvement/current = 0
+parameters/in_air/current = 0
+parameters/mouvement_time/scale = 0.93
