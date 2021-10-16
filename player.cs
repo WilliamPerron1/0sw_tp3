@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+
 public class player : KinematicBody2D
 {
 	Vector2 UP = new Vector2(0, -1);
@@ -19,11 +20,13 @@ public class player : KinematicBody2D
 
 	Sprite currentSprite;
 	AnimationPlayer animPlayer;
+	AnimationTree animTree;
 		// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		currentSprite = GetNode<Sprite>("Sprite");
 		animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		animTree = GetNode<AnimationTree>("AnimationTree");
 	}
 
 	public override void _PhysicsProcess(float delta)
@@ -45,35 +48,50 @@ public class player : KinematicBody2D
 		if (Input.IsActionPressed("ui_left")) {
 			motion.x -= ACCEL;
 			facing_right = false;
-			animPlayer.Play("Run");
+			//animPlayer.Play("Run droite");
+			animTree.Set("parameters/Mouvement/current", 1);
+			attack();
 		} else if (Input.IsActionPressed("ui_right")) {
 			motion.x += ACCEL;
 			facing_right = true;
-			animPlayer.Play("Run");
+			//animPlayer.Play("Run droite");
+			animTree.Set("parameters/Mouvement/current", 1);
+			attack();
 		} else {
 			motion = motion.LinearInterpolate(Vector2.Zero, 0.2f);
-			animPlayer.Play("Idle");
+			//animPlayer.Play("Idle droite");
+			animTree.Set("parameters/Mouvement/current", 0);
+			attack();
 		}
 
 		if (IsOnFloor())
 			// On ne regarde qu'un seul fois et non le maintient de la touche
+			animTree.Set("parameters/In_air_state/current", 0);
 			if (Input.IsActionJustPressed("ui_jump")) {
 				motion.y = -JUMPFORCE;
 				GD.Print($"motion.y = {motion.y}");
 				Console.WriteLine($"motion.y = {motion.y}");
+				animTree.Set("parameters/In_air_state/current", 1);
 			}
 
 		if (!IsOnFloor()) {
 			if (motion.y < 0) {
-				animPlayer.Play("jump");
+				//animPlayer.Play("jump droite");
+				animTree.Set("parameters/in_air/current", 1);
 			} else if (motion.y > 0) {
-				animPlayer.Play("fall");
-			}
+				//animPlayer.Play("fall droite");
+				animTree.Set("parameters/in_air/current", 0);
+			} 
 		}
 
 		motion = MoveAndSlide(motion, UP);
 	}
-
+	
+	void attack(){
+		if (Input.IsActionPressed("attack")){
+			animTree.Set("parameters/Mouvement/current", 2);
+		}
+	}
 
 	
 }

@@ -130,7 +130,7 @@ input_1/auto_advance = false
 [sub_resource type="AnimationNodeTimeScale" id=15]
 
 [sub_resource type="AnimationNodeBlendTree" id=16]
-graph_offset = Vector2( 274.681, -53.4457 )
+graph_offset = Vector2( 0, -65.5 )
 nodes/Animation/node = SubResource( 11 )
 nodes/Animation/position = Vector2( 580, -20 )
 "nodes/Animation 2/node" = SubResource( 7 )
@@ -150,7 +150,7 @@ nodes/in_air/position = Vector2( 1000, 280 )
 nodes/mouvement_time/node = SubResource( 15 )
 nodes/mouvement_time/position = Vector2( 540, 100 )
 nodes/output/position = Vector2( 1200, 80 )
-node_connections = [ "output", 0, "In_air_state", "mouvement_time", 0, "Animation 2", "In_air_state", 0, "Mouvement", "In_air_state", 1, "in_air", "in_air", 0, "Animation 4", "in_air", 1, "Animation 5", "Mouvement", 0, "Animation", "Mouvement", 1, "mouvement_time", "Mouvement", 2, "Animation 3" ]
+node_connections = [ "output", 0, "In_air_state", "Mouvement", 0, "Animation", "Mouvement", 1, "mouvement_time", "Mouvement", 2, "Animation 3", "in_air", 0, "Animation 4", "in_air", 1, "Animation 5", "In_air_state", 0, "Mouvement", "In_air_state", 1, "in_air", "mouvement_time", 0, "Animation 2" ]
 
 [node name="world" type="Node2D"]
 __meta__ = {
@@ -174,7 +174,7 @@ __meta__ = {
 texture = ExtResource( 2 )
 hframes = 9
 vframes = 6
-frame = 27
+frame = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="player"]
 position = Vector2( 2.5, 6.5 )
@@ -195,6 +195,7 @@ anims/jump = SubResource( 6 )
 [node name="AnimationTree" type="AnimationTree" parent="player"]
 tree_root = SubResource( 16 )
 anim_player = NodePath("../AnimationPlayer")
+active = true
 parameters/In_air_state/current = 0
 parameters/Mouvement/current = 0
 parameters/in_air/current = 0
